@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             enum: ["Admin", "Student", "Visitor"],
         },
+
+        accessToken: {
+            type: String
+        }
     },
     { timestamps: true }
 );
@@ -44,16 +48,21 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 };
 
 userSchema.methods.generateAccessToken = async function () {
-    jwt.sign(
-        {
-            _id: this._id,
-            email: this.email,
-            role: this.role,
-        },
-
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-    );
+try {
+        return jwt.sign(
+            {
+                _id: this._id,
+                email: this.email,
+                role: this.role,
+            },
+    
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+        );
+} catch (error) {
+    console.log(`ERR generating accesstoken: ERRS: ${error}`);
+    throw new Error("Something went wrong while generating AccessToken");
+}
 };
 
 const User = mongoose.model("User", userSchema);
