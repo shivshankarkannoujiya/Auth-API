@@ -32,7 +32,7 @@ const authMiddleware = asyncHandler(async (req, _, next) => {
     }
 });
 
-// Authorization Middleware
+// Authorization Middlewares
 const isStudent = asyncHandler(async (req, _, next) => {
     try {
         if (req.user.role !== "Student") {
