@@ -74,7 +74,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const { accessToken } = await generateAccessTokens(user._id);
     const loggedInUser = await User.findById(user._id).select("-password");
-    loggedInUser.accessToken = accessToken;
+    
 
     // send token in Cookie
     const options = {
